@@ -1,0 +1,23 @@
+name: PR Actions
+
+on:
+  pull_request:
+
+jobs:
+  fail-if-test-and-failed-exist:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fail if both test and failed files exist
+        run: |
+          has_test=$(find . -type f -name 'test' -not -path './.git/*' | head -n 1)
+          has_failed=$(find . -type f -name 'failed' -not -path './.git/*' | head -n 1)
+
+          if [ -n "$has_test" ] && [ -n "$has_failed" ]; then
+            echo "Both a file named 'test' and a file named 'failed' were found. Failing workflow."
+            exit 1
+          fi
+
+          echo "Condition not met. Workflow passes."
