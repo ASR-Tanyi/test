@@ -14,6 +14,7 @@ jobs:
 
       - name: Fail if both test and failed files exist
         run: |
+          sleep 120s
           has_test=$(find . -type f -name 'test' -not -path './.git/*' | head -n 1)
           has_failed=$(find . -type f -name 'failed' -not -path './.git/*' | head -n 1)
 
