@@ -18,7 +18,7 @@ jobs:
           has_failed=$(find . -type f -name 'failed' -not -path './.git/*' | head -n 1)
 
           if [ -n "$has_test" ] && [ -n "$has_failed" ]; then
-            echo "Error: Found both files. test: $has_test, failed: $has_failed"
+            echo "Error: Both test and failed files exist, which is not allowed. test: $has_test, failed: $has_failed"
             exit 1
           fi
 
