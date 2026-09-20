@@ -9,7 +9,7 @@ jobs:
   test:
     permissions:
       contents: read
-    runs-on: macos-15-xlarge
+    runs-on: macos-15
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
