@@ -1,26 +1,25 @@
-name: PR Actions
+name: Actions Test
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
 
 jobs:
-  check-test-and-failed-files:
+  test:
     permissions:
       contents: read
-    runs-on: ubuntu-latest
+    runs-on: macos-15-xlarge
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Fail if both test and failed files exist
+      - name: Install Metal
         run: |
-          sleep 120s
-          has_test=$(find . -type f -name 'test' -not -path './.git/*' | head -n 1)
-          has_failed=$(find . -type f -name 'failed' -not -path './.git/*' | head -n 1)
-
-          if [ -n "$has_test" ] && [ -n "$has_failed" ]; then
-            echo "Error: Both test and failed files exist, which is not allowed. test: $has_test, failed: $has_failed"
-            exit 1
-          fi
-
-          echo "Condition not met. Workflow passes."
+          DEVELOPER_DIR="/Applications/Xcode_26.3.app" xcodebuild -version
+          mkdir download
+          DEVELOPER_DIR="/Applications/Xcode_26.3.app" xcodebuild -downloadComponent metalToolchain -exportPath download/
+          ls -al download
+      - name: Upload
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          path: download/*
